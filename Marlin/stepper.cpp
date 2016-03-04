@@ -495,7 +495,7 @@ ISR(TIMER1_COMPA_vect)
 					  endstops_trigsteps[X_AXIS] = count_position[X_AXIS];
                                           if(!probing)
                                           {
-                                             current_position[X_AXIS] = (float)endstops_trigsteps[X_AXIS]/axis_steps_per_unit[X_AXIS];
+                                             current_position[X_AXIS] = X_MAX_POS;
                                              plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
                                           }
 					  endstop_x_hit=true;
@@ -540,7 +540,7 @@ ISR(TIMER1_COMPA_vect)
 					endstops_trigsteps[Y_AXIS] = count_position[Y_AXIS];
                                         if(!probing)
                                         {
-                                           current_position[Y_AXIS] = (float)endstops_trigsteps[Y_AXIS]/axis_steps_per_unit[Y_AXIS];
+                                           current_position[Y_AXIS] = Y_MIN_POS;
                                            plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
                                         }
 					endstop_y_hit=true;
@@ -615,7 +615,7 @@ ISR(TIMER1_COMPA_vect)
       {
         #if defined(Z_PROBE_PIN) && Z_PROBE_PIN > -1
           //bool z_probe_endstop=(READ(Z_PROBE_PIN) != Z_PROBE_ENDSTOP_INVERTING);
-          if(READ(Z_PROBE_PIN) != Z_PROBE_ENDSTOP_INVERTING && probing)
+          if(READ(Z_PROBE_PIN) != Z_PROBE_ENDSTOP_INVERTING)
           {
 			  if(old_zprobe_min_endstop)
 			  {
@@ -647,8 +647,8 @@ ISR(TIMER1_COMPA_vect)
       }
       {
         #if defined(Z_MIN_PIN) && Z_MIN_PIN > -1
-          //bool z_min_endstop=(READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING);
-          if(READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING && homing_z)
+         //bool z_min_endstop=(READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING);
+          if(READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING)
           {
 			  if(old_z_min_endstop)
 			  {
@@ -656,6 +656,11 @@ ISR(TIMER1_COMPA_vect)
 				  if((current_block->steps_z > 0) && (z_min > endstop_trig_period)) {
 					//SERIAL_ECHOLN("Z_MIN triggered!");
 					endstops_trigsteps[Z_AXIS] = count_position[Z_AXIS];
+                                        if(!probing)
+                                        {
+                                           current_position[Z_AXIS] = Z_MIN_POS;
+                                           plan_set_position(current_position[X_AXIS], current_position[Z_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
+                                        }
 					endstop_z_hit=true;
 					step_events_completed = current_block->step_event_count;
 				  }
@@ -663,13 +668,13 @@ ISR(TIMER1_COMPA_vect)
 			  }
 			  else
 			  {
-				//SERIAL_ECHOLN("Reseting Z_MIN variables!");
+			    //SERIAL_ECHOLN("Reseting Z_MIN variables!");
 				old_z_min_endstop = true;
 				//tz_min = millis();
 			  }
           }
-		  else
-		  {
+          else
+          {
 			old_z_min_endstop = false;
 			//tz_min = 0;
 			z_min = 0;
@@ -700,7 +705,7 @@ ISR(TIMER1_COMPA_vect)
 					endstops_trigsteps[Z_AXIS] = count_position[Z_AXIS];
                                         if(!probing)
                                         {
-                                           current_position[Z_AXIS] = (float)endstops_trigsteps[Z_AXIS]/axis_steps_per_unit[Z_AXIS];
+                                           current_position[Z_AXIS] = Z_MAX_POS;
                                            plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
                                         }
 					endstop_z_hit=true;

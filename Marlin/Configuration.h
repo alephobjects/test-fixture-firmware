@@ -238,7 +238,7 @@
 //if PREVENT_DANGEROUS_EXTRUDE is on, you can still disable (uncomment) very long bits of extrusion separately.
 #define PREVENT_LENGTHY_EXTRUDE
 
-#define EXTRUDE_MINTEMP 120
+#define EXTRUDE_MINTEMP 10
 #define EXTRUDE_MAXLENGTH (X_MAX_LENGTH+Y_MAX_LENGTH) //prevent extrusion of very large distances.
 
 /*================== Thermal Runaway Protection ==============================
@@ -315,7 +315,7 @@ const bool X_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 const bool Y_MIN_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 const bool Z_MIN_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
 const bool Z_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
-const bool X_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+const bool X_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 const bool Y_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop. USED FOR EMI ATTENUATION!
 const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic of the endstop.
 //#define DISABLE_MAX_ENDSTOPS
@@ -340,28 +340,28 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 #define DISABLE_INACTIVE_EXTRUDER true //disable only inactive extruders and keep active extruder enabled
 
 #define INVERT_X_DIR false    // for LulzBot set to false
-#define INVERT_Y_DIR true    // for LulzBot set to true
+#define INVERT_Y_DIR false    // for LulzBot set to true
 #define INVERT_Z_DIR false     // for LulzBot set to false
-#define INVERT_E0_DIR true   // for standard LulzBot hotends set to true
-#define INVERT_E1_DIR true    // for standard LulzBot hotends set to true
+#define INVERT_E0_DIR false   // for standard LulzBot hotends set to true
+#define INVERT_E1_DIR false    // for standard LulzBot hotends set to true
 #define INVERT_E2_DIR true   // for standard LulzBot hotends set to true
 
 // ENDSTOP SETTINGS:
 // Sets direction of endstops when homing; 1=MAX, -1=MIN
 #define X_HOME_DIR -1
-#define Y_HOME_DIR 1
+#define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
 
-#define min_software_endstops true // If true, axis won't move to coordinates less than HOME_POS.
-#define max_software_endstops true  // If true, axis won't move to coordinates greater than the defined lengths below.
+#define min_software_endstops false // If true, axis won't move to coordinates less than HOME_POS.
+#define max_software_endstops false  // If true, axis won't move to coordinates greater than the defined lengths below.
 
 // Travel limits after homing
-#define X_MAX_POS 288
-#define X_MIN_POS -22
-#define Y_MAX_POS 303
-#define Y_MIN_POS -20
-#define Z_MAX_POS 270
-#define Z_MIN_POS 0
+#define X_MAX_POS 65535
+#define X_MIN_POS -65535
+#define Y_MAX_POS 65535
+#define Y_MIN_POS -65535
+#define Z_MAX_POS 65535
+#define Z_MIN_POS -65535
 
 #define X_MAX_LENGTH (X_MAX_POS - X_MIN_POS)
 #define Y_MAX_LENGTH (Y_MAX_POS - Y_MIN_POS)
@@ -454,8 +454,8 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 
   #ifdef Z_SAFE_HOMING
 
-    #define Z_SAFE_HOMING_X_POINT (-19)    // X point for Z homing when homing all axis (G28)
-    #define Z_SAFE_HOMING_Y_POINT (258)    // Y point for Z homing when homing all axis (G28)
+    #define Z_SAFE_HOMING_X_POINT (-65535)    // X point for Z homing when homing all axis (G28)
+    #define Z_SAFE_HOMING_Y_POINT (-65535)    // Y point for Z homing when homing all axis (G28)
 
   #endif
 
@@ -498,21 +498,21 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 
 //// MOVEMENT SETTINGS
 #define NUM_AXIS 4 // The axis order in all axis related arrays is X, Y, Z, E
-#define HOMING_FEEDRATE {50*60, 50*60, 8*60, 0}  // set the homing speeds (mm/min)
+#define HOMING_FEEDRATE {200*60, 200*60, 50*60, 200*60}  // set the homing speeds (mm/min)
 
 // default settings
 
 #if EXTRUDERS == 1
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100.5,100.5,1600,830}  // default steps per unit for LulzBot TAZ
 #elif EXTRUDERS == 2
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100.5,100.5,1600,830,830}  // default steps per unit for LulzBot TAZ
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,100,100,100}  // default steps per unit for LulzBot TAZ
 #elif EXTRUDERS == 3
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100.5,100.5,1600,830,830,830}  // default steps per unit for LulzBot TAZ
 #elif EXTRUDERS == 4
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100.5,100.5,1600,830,830,830,830}  // default steps per unit for LulzBot TAZ
 #endif
-#define DEFAULT_MAX_FEEDRATE          {800, 800, 3, 40}    // (mm/sec)
-#define DEFAULT_MAX_ACCELERATION      {9000,9000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves.
+#define DEFAULT_MAX_FEEDRATE          {800, 800, 800, 800}    // (mm/sec)
+#define DEFAULT_MAX_ACCELERATION      {9000,9000,9000,9000}    // X, Y, Z, E maximum start speed for accelerated moves.
 
 #define DEFAULT_ACCELERATION          500    // X, Y, Z and E max acceleration in mm/s^2 for printing moves
 #define DEFAULT_RETRACT_ACCELERATION  3000   // X, Y, Z and E max acceleration in mm/s^2 for retracts
@@ -525,8 +525,8 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 
 // The speed change that does not require acceleration (i.e. the software might assume it can be done instantaneously)
 #define DEFAULT_XYJERK                8.0    // (mm/sec)
-#define DEFAULT_ZJERK                 0.4     // (mm/sec)
-#define DEFAULT_EJERK                 10.0    // (mm/sec)
+#define DEFAULT_ZJERK                 8.0     // (mm/sec)
+#define DEFAULT_EJERK                 8.0    // (mm/sec)
 
 //===========================================================================
 //=============================Additional Features===========================

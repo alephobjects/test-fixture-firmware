@@ -648,10 +648,10 @@ void setup()
   _delay_ms(1000);	// wait 1sec to display the splash screen
 
   //Disable Z_MIN and Z_PROBE when not in use
-  SET_OUTPUT(Z_MIN_PIN);
+/*SET_OUTPUT(Z_MIN_PIN);
   WRITE(Z_MIN_PIN, LOW);
   SET_OUTPUT(Z_PROBE_PIN);
-  WRITE(Z_PROBE_PIN, LOW);
+  WRITE(Z_PROBE_PIN, LOW);*/
 
 #if defined(CONTROLLERFAN_PIN) && CONTROLLERFAN_PIN > -1
   #ifdef CONTROLLERFAN_SPEED_START
@@ -3471,13 +3471,11 @@ Sigma_Exit:
       #endif
       #if defined(Z_MIN_PIN) && Z_MIN_PIN > -1
         SERIAL_PROTOCOLPGM(MSG_Z_MIN);
-        SERIAL_PROTOCOLLN("disabled unless homing");
-        //SERIAL_PROTOCOLLN(((READ(Z_MIN_PIN)^Z_MIN_ENDSTOP_INVERTING)?MSG_ENDSTOP_HIT:MSG_ENDSTOP_OPEN));
+        SERIAL_PROTOCOLLN(((READ(Z_MIN_PIN)^Z_MIN_ENDSTOP_INVERTING)?MSG_ENDSTOP_HIT:MSG_ENDSTOP_OPEN));
       #endif
       #if defined(Z_PROBE_PIN) && Z_PROBE_PIN > -1
         SERIAL_PROTOCOLPGM(MSG_Z_PROBE);
-        SERIAL_PROTOCOLLN("disabled unless probing");
-        //SERIAL_PROTOCOLLN(((READ(Z_PROBE_PIN)^Z_PROBE_ENDSTOP_INVERTING)?MSG_ENDSTOP_HIT:MSG_ENDSTOP_OPEN));
+        SERIAL_PROTOCOLLN(((READ(Z_PROBE_PIN)^Z_PROBE_ENDSTOP_INVERTING)?MSG_ENDSTOP_HIT:MSG_ENDSTOP_OPEN));
       #endif
       #if defined(Z_MAX_PIN) && Z_MAX_PIN > -1
         SERIAL_PROTOCOLPGM(MSG_Z_MAX);
@@ -3756,14 +3754,14 @@ Sigma_Exit:
 
         if(pin_state >= -1 && pin_state <= 1){
 
-          for(int8_t i = 0; i < (int8_t)(sizeof(sensitive_pins)/sizeof(int)); i++)
+        /*for(int8_t i = 0; i < (int8_t)(sizeof(sensitive_pins)/sizeof(int)); i++)
           {
             if (sensitive_pins[i] == pin_number)
             {
               pin_number = -1;
               break;
             }
-          }
+          }*/
 
           if (pin_number > -1)
           {
@@ -3771,7 +3769,7 @@ Sigma_Exit:
 
             st_synchronize();
 
-            pinMode(pin_number, INPUT);
+            //pinMode(pin_number, INPUT);
 
             switch(pin_state){
             case 1:
