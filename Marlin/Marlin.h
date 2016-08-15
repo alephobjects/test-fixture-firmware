@@ -263,6 +263,7 @@ extern bool homing_z;
   extern unsigned short current_layer; // estimated current layer number
 #endif //TRACK_LAYER
 extern int fanSpeed;
+extern bool fanPick;
 #ifdef BARICUDA
 extern int ValvePressure;
 extern int EtoPPressure;

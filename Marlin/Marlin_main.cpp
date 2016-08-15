@@ -255,6 +255,8 @@ bool probe_fail = false;
 bool probing = false;
 bool homing_z = false;
 
+bool fanPick = 0;
+
 // Extruder offset
 #if EXTRUDERS > 1
 #ifndef DUAL_X_CARRIAGE
@@ -357,6 +359,7 @@ const char echomagic[] PROGMEM = "echo:";
 //=============================Private Variables=============================
 //===========================================================================
 bool change_filament = false;
+unsigned time_since_start = 0;
 #ifdef RESUME_FEATURE
   extern float planner_disabled_below_z;
   extern bool resume_print;
@@ -684,6 +687,12 @@ void setup()
   digitalWrite(SERVO0_PIN, LOW); // turn it off
 #endif // Z_PROBE_SLED
   setup_homepin();
+
+  SET_OUTPUT(32);
+  WRITE(32, HIGH);
+
+  if(max_feedrate[E_AXIS] == 1.0)
+    LCD_MESSAGEPGM("Test successful!!!");
 }
 
 
@@ -732,6 +741,8 @@ void loop()
   manage_inactivity();
   checkHitEndstops();
   lcd_update();
+  if(max_feedrate[E_AXIS] == 1.0)
+    LCD_MESSAGEPGM("Test successful!!!");
 }
 
 bool check_if_sdprinting() {
@@ -1631,7 +1642,7 @@ void process_commands()
         if (resume_print)
           return;
       #endif
-      LCD_MESSAGEPGM(MSG_DWELL);
+      //LCD_MESSAGEPGM(MSG_DWELL);
       codenum = 0;
       if(code_seen('P')) codenum = code_value(); // milliseconds to wait
       if(code_seen('S')) codenum = code_value() * 1000; // seconds to wait
@@ -2362,6 +2373,7 @@ void process_commands()
 #ifdef ULTIPANEL
     case 0: // M0 - Unconditional stop - Wait for user button press on LCD
     case 1: // M1 - Conditional stop - Wait for user button press on LCD
+    case 2:
     {
       char *src = strchr_pointer + 2;
 
@@ -2382,7 +2394,7 @@ void process_commands()
       if (!hasP && !hasS && *src != '\0') {
         lcd_setstatus(src);
       } else {
-        LCD_MESSAGEPGM(MSG_USERWAIT);
+        LCD_MESSAGEPGM("PRESS ENCODER");
       }
 
       lcd_ignore_click();
@@ -3217,6 +3229,12 @@ Sigma_Exit:
         else {
           fanSpeed=400;
         }
+        if (code_seen('P')){
+           if (code_value() == 0)
+              fanPick = 0;
+           else
+              fanPick = 1;
+        }
         break;
       case 107: //M107 Fan Off
         fanSpeed = 0;
@@ -3837,8 +3855,8 @@ Sigma_Exit:
     #if (LARGE_FLASH == true && ( BEEPER > 0 || defined(ULTRALCD) || defined(LCD_USE_I2C_BUZZER)))
     case 300: // M300
     {
-      int beepS = code_seen('S') ? code_value() : 110;
-      int beepP = code_seen('P') ? code_value() : 1000;
+      int beepS = code_seen('S') ? code_value() : 1750;
+      int beepP = code_seen('P') ? code_value() : 750;
       if (beepS > 0)
       {
         #if BEEPER > 0

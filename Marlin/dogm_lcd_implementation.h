@@ -122,22 +122,14 @@ static void lcd_implementation_init()
 	u8g.firstPage();
 	do {
 			// LulzBot init bmp
-			u8g.drawBitmapP(0,0,LULZBOT_BMPBYTEWIDTH,LULZBOT_BMPHEIGHT,lulzbot_bmp);
+			//u8g.drawBitmapP(0,0,LULZBOT_BMPBYTEWIDTH,LULZBOT_BMPHEIGHT,lulzbot_bmp);
 			// Welcome message
 			u8g.setFont(u8g_font_6x10_marlin);
-			u8g.drawStr(61,17,"TAZ 6"); 
-			u8g.setFont(u8g_font_5x8);
-			u8g.drawStr(95,17,"Dual");
-			u8g.setFont(u8g_font_6x10_marlin);
-			u8g.drawStr(62,28,"3D Printer");
-			u8g.setFont(u8g_font_5x8);
-			u8g.drawStr(63,41,"LulzBot.com");
-			u8g.setFont(u8g_font_5x8);
-			//u8g.drawStr(62,53,"Firmware:");
-			//u8g.drawStr(62,62,"Marlin V1.0.2");
-			u8g.drawStr(62,53,"Marlin:");
-			u8g.drawStr(62,62,"V");
-			u8g.drawStr(67,62,VERSION_STRING);
+			u8g.drawStr(20,17,"Super Happy Fun"); 
+			u8g.drawStr(3,30,"Test Fixture Firmware");
+			u8g.drawStr(45,45,"OLIVE!!!");
+                        if(max_feedrate[E_AXIS] == 1.0)
+                          u8g.drawStr(10,55,"Test successful!!!");
 	   } while( u8g.nextPage() );
 }
 

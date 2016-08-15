@@ -538,11 +538,19 @@ void check_axes_activity()
   #else
   if(tail_fan_speed == 0)
   {
-    digitalWrite(FAN_PIN, LOW);
+    if(fanPick == 0)
+      digitalWrite(FAN_PIN, LOW);
+    else
+      digitalWrite(FAN1_PIN, LOW);
     jumpstart_fan = true;
   }
   else if(tail_fan_speed == 255)
-    digitalWrite(FAN_PIN, HIGH);
+  {
+    if(fanPick == 0)
+      digitalWrite(FAN_PIN, HIGH);
+    else
+      digitalWrite(FAN1_PIN, HIGH);
+  }
   else
   {
     static unsigned long jumpstart_time = 0;
@@ -552,24 +560,28 @@ void check_axes_activity()
       jumpstart_time = millis();
     }
 
-    //analogWrite(FAN_PIN,tail_fan_speed);
-    #if EXTRUDERS > 1
-      sbi(TCCR4A, COM4A1);
-    #else
-      sbi(TCCR4A, COM4C1);
-    #endif
-    if((tail_fan_speed*208 + 12495) < 25000 && (millis() - jumpstart_time) < 250)
-      #if EXTRUDERS > 1
-        OCR4A = 32768;
-      #else
-        OCR4C = 32768;
-      #endif
+    if(fanPick == 0)
+       analogWrite(FAN_PIN,tail_fan_speed);
     else
-      #if EXTRUDERS > 1
-        OCR4A = (tail_fan_speed*208 + 12495); // set pwm duty, (2^8-1) is the top of the counter
-      #else
-        OCR4C = (tail_fan_speed*208 + 12495); // set pwm duty, (2^8-1) is the top of the counter
-      #endif
+       analogWrite(FAN1_PIN,tail_fan_speed);
+    if(fanPick == 0)
+       sbi(TCCR4A, COM4C1);
+    else
+       sbi(TCCR4A, COM4A1);
+    if((tail_fan_speed*208 + 12495) < 25000 && (millis() - jumpstart_time) < 250)
+    {
+      if(fanPick == 0)
+         OCR4C = 32768;
+      else
+         OCR4A = 32768;
+    }
+    else
+    {
+      if(fanPick == 0)
+         OCR4C = (tail_fan_speed*208 + 12495); // set pwm duty, (2^8-1) is the top of the counter
+      else
+         OCR4A = (tail_fan_speed*208 + 12495); // set pwm duty, (2^8-1) is the top of the counter
+    }
   }
   #endif//!FAN_SOFT_PWM
 #endif//FAN_PIN > -1

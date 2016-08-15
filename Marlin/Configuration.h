@@ -342,8 +342,8 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 #define INVERT_X_DIR false    // for LulzBot set to false
 #define INVERT_Y_DIR false    // for LulzBot set to true
 #define INVERT_Z_DIR false     // for LulzBot set to false
-#define INVERT_E0_DIR false   // for standard LulzBot hotends set to true
-#define INVERT_E1_DIR false    // for standard LulzBot hotends set to true
+#define INVERT_E0_DIR true   // for standard LulzBot hotends set to true
+#define INVERT_E1_DIR true    // for standard LulzBot hotends set to true
 #define INVERT_E2_DIR true   // for standard LulzBot hotends set to true
 
 // ENDSTOP SETTINGS:

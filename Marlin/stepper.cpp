@@ -659,7 +659,7 @@ ISR(TIMER1_COMPA_vect)
                                         if(!probing)
                                         {
                                            current_position[Z_AXIS] = Z_MIN_POS;
-                                           plan_set_position(current_position[X_AXIS], current_position[Z_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
+                                           plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
                                         }
 					endstop_z_hit=true;
 					step_events_completed = current_block->step_event_count;
